@@ -11,6 +11,13 @@ public class SpeechInput : MonoBehaviour {
     Dictionary<string, System.Action> keywords;
     bool canSwitch;
     int nextScene;
+    public SpriteRenderer brushSprite;
+    public DetectJoints detectJoints;
+
+    // sizes for the brush
+    public float smallBrush = 0.1f;
+    public float mediumBrush = 0.5f;
+    public float largeBrush = 0.9f;
 
     public GameObject confirmationText;
 	// Use this for initialization
@@ -44,6 +51,47 @@ public class SpeechInput : MonoBehaviour {
         {
             nextScene = -1;
             confirmationText.SetActive(false);
+        });
+
+        // Change colors
+        keywords.Add("blue", () =>
+        {
+            brushSprite.color = new Color(0, 0, 238);
+            detectJoints.setColor(new Color(0, 0, 238));
+        });
+        keywords.Add("red", () =>
+        {
+            brushSprite.color = new Color(255, 0, 0);
+            detectJoints.setColor(new Color(255, 0, 0));
+        });
+        keywords.Add("green", () =>
+        {
+            brushSprite.color = new Color(0, 255, 0);
+            detectJoints.setColor(new Color(0, 255, 0));
+        });
+        keywords.Add("black", () =>
+        {
+            brushSprite.color = new Color(0, 0, 0);
+            detectJoints.setColor(new Color(0, 0, 0));
+        });
+        keywords.Add("white", () =>
+        {
+            brushSprite.color = new Color(190, 186, 186);
+            detectJoints.setColor(new Color(190, 186, 186));
+        });
+
+        // Change the brush size
+        keywords.Add("small brush", () =>
+        {
+            detectJoints.setLineWidth(smallBrush);
+        });
+        keywords.Add("medium brush", () =>
+        {
+            detectJoints.setLineWidth(mediumBrush);
+        });
+        keywords.Add("large brush", () =>
+        {
+            detectJoints.setLineWidth(largeBrush);
         });
 
 
