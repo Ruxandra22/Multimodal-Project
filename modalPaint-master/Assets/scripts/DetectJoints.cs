@@ -36,6 +36,15 @@ public class DetectJoints : MonoBehaviour {
     UnityEngine.AudioSource[] songs;
     public int hitIntroSongCount = 0;
 
+    public void setColor(Color color)
+    {
+        this.color = color;
+    }
+
+    public void setLineWidth(float lineWidth)
+    {
+        this.lineWidth = lineWidth;
+    }
 
     void Start() {
 
