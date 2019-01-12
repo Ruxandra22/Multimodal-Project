@@ -13,6 +13,7 @@ public class SpeechInput : MonoBehaviour {
     int nextScene;
     public SpriteRenderer brushSprite;
     public DetectJoints detectJoints;
+    public TrackEyes trackEyes;
 
     // sizes for the brush
     public float smallBrush = 0.1f;
@@ -20,23 +21,24 @@ public class SpeechInput : MonoBehaviour {
     public float largeBrush = 0.9f;
 
     public GameObject confirmationText;
+    public GameObject loadingImage;
 	// Use this for initialization
 	void Start () {
         nextScene = -1;       
 
         keywords = new Dictionary<string, System.Action>();
 
-        keywords.Add("eye", () =>
+        keywords.Add("eye tracking", () =>
         {
             EyesCalled();
         });
 
-        keywords.Add("gestures", () =>
+        keywords.Add("gesture tracking", () =>
         {
             GesturesCalled();
         });
 
-        keywords.Add("menu", () =>
+        keywords.Add("menu screen", () =>
         {
             MenuCalled();
         });
@@ -54,46 +56,166 @@ public class SpeechInput : MonoBehaviour {
         });
 
         // Change colors
-        keywords.Add("blue", () =>
+        keywords.Add("blue brush", () =>
         {
             brushSprite.color = new Color(0, 0, 238);
-            detectJoints.setColor(new Color(0, 0, 238));
+            if (detectJoints != null)
+            {
+                detectJoints.setColor(new Color(0, 0, 238));
+            }
+            if (trackEyes != null)
+            {
+                trackEyes.setColor(new Color(0, 0, 238));
+            }
         });
-        keywords.Add("red", () =>
+        keywords.Add("red brush", () =>
         {
             brushSprite.color = new Color(255, 0, 0);
-            detectJoints.setColor(new Color(255, 0, 0));
+            if (detectJoints != null)
+            {
+                detectJoints.setColor(new Color(255, 0, 0));
+            }
+            if (trackEyes != null)
+            {
+                trackEyes.setColor(new Color(255, 0, 0));
+            }
         });
-        keywords.Add("green", () =>
+        keywords.Add("green brush", () =>
         {
             brushSprite.color = new Color(0, 255, 0);
-            detectJoints.setColor(new Color(0, 255, 0));
+            if (detectJoints != null)
+            {
+                detectJoints.setColor(new Color(0, 255, 0));
+            }
+            if (trackEyes != null)
+            {
+                trackEyes.setColor(new Color(0, 255, 0));
+            }
         });
-        keywords.Add("black", () =>
+        keywords.Add("black brush", () =>
         {
             brushSprite.color = new Color(0, 0, 0);
-            detectJoints.setColor(new Color(0, 0, 0));
+            if (detectJoints != null)
+            {
+                detectJoints.setColor(new Color(0, 0, 0));
+            }
+            if (trackEyes != null)
+            {
+                trackEyes.setColor(new Color(0, 0, 0));
+            }
         });
-        keywords.Add("white", () =>
+        keywords.Add("white brush", () =>
         {
             brushSprite.color = new Color(190, 186, 186);
-            detectJoints.setColor(new Color(190, 186, 186));
+            if (detectJoints != null)
+            {
+                detectJoints.setColor(new Color(190, 186, 186));
+            }
+            if (trackEyes != null)
+            {
+                trackEyes.setColor(new Color(190, 186, 186));
+            }
         });
 
         // Change the brush size
         keywords.Add("small brush", () =>
         {
-            detectJoints.setLineWidth(smallBrush);
+            if (detectJoints != null)
+            {
+                detectJoints.setLineWidth(smallBrush);
+            }
+            if (trackEyes != null)
+            {
+                trackEyes.setLineWidth(smallBrush);
+            }
         });
         keywords.Add("medium brush", () =>
         {
-            detectJoints.setLineWidth(mediumBrush);
+            if (detectJoints != null)
+            {
+                detectJoints.setLineWidth(mediumBrush);
+            }
+            if (trackEyes != null)
+            {
+                trackEyes.setLineWidth(mediumBrush);
+            }
         });
         keywords.Add("large brush", () =>
         {
-            detectJoints.setLineWidth(largeBrush);
+            if (detectJoints != null)
+            {
+                detectJoints.setLineWidth(largeBrush);
+            }
+            if (trackEyes != null)
+            {
+                trackEyes.setLineWidth(largeBrush);
+            }
         });
 
+        // stop/start painting
+        keywords.Add("start painting", () =>
+        {
+            if (trackEyes != null)
+            {
+                trackEyes.setIsDrawing(true);
+            }
+        });
+        keywords.Add("start brushing", () =>
+        {
+            if (trackEyes != null)
+            {
+                trackEyes.setIsDrawing(true);
+            }
+        });
+        keywords.Add("start drawing", () =>
+        {
+            if (trackEyes != null)
+            {
+                trackEyes.setIsDrawing(true);
+            }
+        });
+        keywords.Add("start", () =>
+        {
+            if (trackEyes != null)
+            {
+                trackEyes.setIsDrawing(true);
+            }
+        });
+        keywords.Add("stop painting", () =>
+        {
+            if (trackEyes != null)
+            {
+                trackEyes.setIsDrawing(false);
+            }
+        });
+        keywords.Add("stop brushing", () =>
+        {
+            if (trackEyes != null)
+            {
+                trackEyes.setIsDrawing(false);
+            }
+        });
+        keywords.Add("stop drawing", () =>
+        {
+            if (trackEyes != null)
+            {
+                trackEyes.setIsDrawing(false);
+            }
+        });
+        keywords.Add("stop", () =>
+        {
+            if (trackEyes != null)
+            {
+                trackEyes.setIsDrawing(false);
+            }
+        });
+        keywords.Add("oh my god", () =>
+        {
+            if (trackEyes != null)
+            {
+                trackEyes.setIsDrawing(false);
+            }
+        });
 
         keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
         keywordRecognizer.OnPhraseRecognized += KeywordRecognizerOnPhraseRecognized;
@@ -119,6 +241,11 @@ public class SpeechInput : MonoBehaviour {
     {
         print("You said eyes");
         nextScene = 2;
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            ChangeScene();
+            return;
+        }
         confirmationText.SetActive(true);
     }
 
@@ -126,11 +253,17 @@ public class SpeechInput : MonoBehaviour {
     {
         print("you said gestures");
         nextScene = 1;
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            ChangeScene();
+            return;
+        }
         confirmationText.SetActive(true);
     }
 
     void MenuCalled()
     {
+        if (SceneManager.GetActiveScene().buildIndex == 0) return;
         print("you said you want to go back to the menu");
         nextScene = 0;
         confirmationText.SetActive(true);
@@ -138,8 +271,10 @@ public class SpeechInput : MonoBehaviour {
 
     void ChangeScene()
     {
+        if (SceneManager.GetActiveScene().buildIndex == nextScene) return;
         if (nextScene != -1)
         {
+            loadingImage.SetActive(true);
             SceneManager.LoadScene(nextScene);
         }
     }

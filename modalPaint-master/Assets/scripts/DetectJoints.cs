@@ -26,6 +26,7 @@ public class DetectJoints : MonoBehaviour {
     public float lineWidth = .1f;
     public int lineNumber = 0;
     public int lineOrder = 10;
+    public float defaultBrushSize = 0.8f;
     public List<LineRenderer> lines = new List<LineRenderer>();
 
     // colors and renderers
@@ -39,11 +40,13 @@ public class DetectJoints : MonoBehaviour {
     public void setColor(Color color)
     {
         this.color = color;
+        CreateLine();
     }
 
     public void setLineWidth(float lineWidth)
     {
         this.lineWidth = lineWidth;
+        CreateLine();
     }
 
     void Start() {
@@ -121,6 +124,7 @@ public class DetectJoints : MonoBehaviour {
         this.lineNumber = 0;
         this.lineOrder++;
         this.vectorDrawnLinesList = new List<Vector3>();
+        brushSprite.transform.localScale = new Vector3(defaultBrushSize + this.lineWidth, defaultBrushSize + this.lineWidth, defaultBrushSize + this.lineWidth);
     }
 
     void ReconstructBrush(RaycastHit hit) {
