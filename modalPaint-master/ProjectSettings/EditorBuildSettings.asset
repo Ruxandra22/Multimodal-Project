@@ -9,9 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/Gestures.unity
-    guid: 737c5312dd545434c9ccbb1ba8c5fe85
+    path: Assets/Scenes/GestureScene.unity
+    guid: 4ce4d4d4aeef2e54e97bb40827915db8
   - enabled: 1
-    path: Assets/Scenes/Eyes.unity
-    guid: 84b1b76dacbb16e4fa4af68643ff22ec
+    path: Assets/Scenes/TobiiTrackingScene.unity
+    guid: 5479071993cda764e90043991af99ea4
   m_configObjects: {}
